@@ -49,6 +49,20 @@ export class grid {
         }
     }
 
+    getShadow(row: number, col: number, length: number, direction: string): Array<square> {
+        const shadow = new Array()
+        if(direction === "h") {
+            for(let i = 0; i < length; i++) {
+                shadow.push(row+i, col)
+            }
+        } else {
+            for(let i = 0; i< length; i++) {
+                shadow.push(row, col+i)
+            }
+        }
+        return shadow
+    }
+
     getOccupiedSquares(): Array<square> {
         let occupiedSquares = new Array()
         this.squares.forEach(square => {
