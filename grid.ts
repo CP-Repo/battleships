@@ -69,6 +69,14 @@ export class Grid {
         return occupiedSquares
     }
 
+    getRow(row: number): Array<Square> {
+        const squares = new Array()
+        for(let i = 0; i < this.columnNum; i++) {
+            squares.push(this.getSquare(row, i))
+        }
+        return squares
+    }
+
     getSquare(row: number, column: number): Square {
         let foundSquare = this.squares[row*this.columnNum + column]
         /**

@@ -57,6 +57,13 @@ var Grid = /** @class */ (function () {
         });
         return occupiedSquares;
     };
+    Grid.prototype.getRow = function (row) {
+        var squares = new Array();
+        for (var i = 0; i < this.columnNum; i++) {
+            squares.push(this.getSquare(row, i));
+        }
+        return squares;
+    };
     Grid.prototype.getSquare = function (row, column) {
         var foundSquare = this.squares[row * this.columnNum + column];
         /**

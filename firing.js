@@ -17,6 +17,32 @@ play(area);
 function getCoords(input) {
     return [input.slice(0, 1), input.slice(1)];
 }
+function printGrid(area) {
+    console.log("~: Sea");
+    console.log("X: Miss");
+    console.log("S: Ship");
+    console.log("*: Hit");
+    var _loop_1 = function (i) {
+        var outString = "|";
+        area.getRow(i).forEach(function (square) {
+            if (square.hasOccupant() && square.hit) {
+                outString += "*|";
+            }
+            else if (square.hasOccupant() && !square.hit) {
+                outString += "S|";
+            }
+            else if (!square.hasOccupant() && square.hit) {
+                outString += "X|";
+            }
+            else
+                outString += "~|";
+        });
+        console.log(outString);
+    };
+    for (var i = 0; i < area.rowNum; i++) {
+        _loop_1(i);
+    }
+}
 function play(area) {
     var coordRange = area.colRef[0] + "1" + "-" + area.colRef[area.colRef.length - 1] + area.rowNum;
     rl.question("Enter Coordinates within range " + coordRange + ": ", function (entered) {
@@ -24,6 +50,7 @@ function play(area) {
         var col = area.colRef.indexOf(coords[0].toUpperCase());
         var row = parseInt(coords[1]);
         if (entered.toUpperCase() === "QUIT") {
+            printGrid(area);
             rl.close();
         }
         else if (col !== -1 && row > 0 && row <= area.rowNum) {
@@ -46,8 +73,10 @@ function play(area) {
             if (!area.allSunk()) {
                 play(area);
             }
-            else
+            else {
+                printGrid(area);
                 rl.close();
+            }
         }
         else {
             console.log("Improper Coordinates");
