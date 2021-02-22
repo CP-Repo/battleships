@@ -1,7 +1,7 @@
 import { exception } from "console";
 
-export class square {
-    occupant?: occupant;
+export class Square {
+    occupant?: Occupant;
     hit: boolean = false;
     row: number;
     column: number;
@@ -11,11 +11,11 @@ export class square {
         this.column = column
     }
 
-    getOccupant(): occupant {
+    getOccupant(): Occupant {
         return this.occupant
     }
 
-    setOccupant(oc: occupant): void {
+    setOccupant(oc: Occupant): void {
         this.occupant = oc
     }
 
@@ -29,9 +29,9 @@ export class square {
     }
 }
 
-export class grid {
-    squares: Array<square> = new Array();
-    occupants: Array<occupant>
+export class Grid {
+    squares: Array<Square> = new Array();
+    occupants: Array<Occupant>
     rowNum: number;
     columnNum: number;
     colRef: Array<string> = new Array()
@@ -41,7 +41,7 @@ export class grid {
         this.columnNum = columns
         for(let i = 0; i < rows; i++) {
             for(let j = 0; j < columns; j++) {
-                this.squares.push(new square(i,j))
+                this.squares.push(new Square(i,j))
             }
         }
         for(let i = 0; i < this.columnNum; i++) {
@@ -49,7 +49,7 @@ export class grid {
         }
     }
 
-    getOccupiedSquares(): Array<square> {
+    getOccupiedSquares(): Array<Square> {
         let occupiedSquares = new Array()
         this.squares.forEach(square => {
             if(square.hasOccupant()){
@@ -59,14 +59,14 @@ export class grid {
         return occupiedSquares
     }
 
-    getSquare(row: number, column: number): square {
-        let foundSquare = this.squares[row*this.columnNum + column]
+    getSquare(row: number, column: number): Square {
+        let foundSquare = this.squares[row*this.columnNum + column] //whilst wraparound could happen if a column provideed is larger thn the number of columns, earlier logic on the input prevents this
         if(foundSquare === undefined) {
             throw exception("No square found")
         } else return foundSquare
     }
 
-    populate(ships: Array<occupant>): void {
+    populate(ships: Array<Occupant>): void {
         this.occupants = ships
         ships.forEach(ship => {
             if(getRandomInt(2) == 1) {
@@ -86,7 +86,7 @@ export class grid {
     }
 }
 
-export class occupant {
+export class Occupant {
     name: string
     size: number;
     hits: number = 0;
@@ -110,7 +110,7 @@ export class occupant {
     
 }
 
-function placeRow(ship: occupant, grid: grid): void {
+function placeRow(ship: Occupant, grid: Grid): void {
     const row = getRandomInt(grid.rowNum)
     const start = getRandomInt(grid.columnNum-ship.size)
     let occupiedFlag = false
@@ -129,7 +129,7 @@ function placeRow(ship: occupant, grid: grid): void {
     }
 }
 
-function placeCol(ship: occupant, grid: grid): void {
+function placeCol(ship: Occupant, grid: Grid): void {
     const col = getRandomInt(grid.columnNum)
     const start = getRandomInt(grid.rowNum-ship.size)
     let occupiedFlag = false
@@ -148,6 +148,6 @@ function placeCol(ship: occupant, grid: grid): void {
     }
 }
 
-function getRandomInt(max: number): number {
+function getRandomInt(max: number): number { // random int is not inclusive of max
     return Math.floor(Math.random() * Math.floor(max))
 }

@@ -6,14 +6,11 @@ var rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
-var colRef = new Array("A", "B", "C", "D", "E", "F", "G", "H", "I", "J");
-var area = new grid_1.grid(10, 10);
-var destroyer1 = new grid_1.occupant("destroyer1", 4);
-var destroyer2 = new grid_1.occupant("destroyer2", 4);
-var battleship1 = new grid_1.occupant("battleship1", 5);
+var area = new grid_1.Grid(10, 10);
+var destroyer1 = new grid_1.Occupant("destroyer1", 4);
+var destroyer2 = new grid_1.Occupant("destroyer2", 4);
+var battleship1 = new grid_1.Occupant("battleship1", 5);
 area.populate(new Array(destroyer1, destroyer2, battleship1));
-console.log(area.colRef);
-console.log(area.getOccupiedSquares());
 play(area);
 function getCoords(input) {
     return [input.slice(0, 1), input.slice(1)];

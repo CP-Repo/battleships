@@ -1,47 +1,47 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.occupant = exports.grid = exports.square = void 0;
+exports.Occupant = exports.Grid = exports.Square = void 0;
 var console_1 = require("console");
-var square = /** @class */ (function () {
-    function square(row, column) {
+var Square = /** @class */ (function () {
+    function Square(row, column) {
         this.hit = false;
         this.row = row;
         this.column = column;
     }
-    square.prototype.getOccupant = function () {
+    Square.prototype.getOccupant = function () {
         return this.occupant;
     };
-    square.prototype.setOccupant = function (oc) {
+    Square.prototype.setOccupant = function (oc) {
         this.occupant = oc;
     };
-    square.prototype.hasOccupant = function () {
+    Square.prototype.hasOccupant = function () {
         if (this.occupant)
             return true;
         else
             return false;
     };
-    square.prototype.onHit = function () {
+    Square.prototype.onHit = function () {
         this.hit = true;
     };
-    return square;
+    return Square;
 }());
-exports.square = square;
-var grid = /** @class */ (function () {
-    function grid(rows, columns) {
+exports.Square = Square;
+var Grid = /** @class */ (function () {
+    function Grid(rows, columns) {
         this.squares = new Array();
         this.colRef = new Array();
         this.rowNum = rows;
         this.columnNum = columns;
         for (var i = 0; i < rows; i++) {
             for (var j = 0; j < columns; j++) {
-                this.squares.push(new square(i, j));
+                this.squares.push(new Square(i, j));
             }
         }
         for (var i = 0; i < this.columnNum; i++) {
             this.colRef.push(String.fromCharCode(65 + i)); //65 is the unicode for A
         }
     }
-    grid.prototype.getOccupiedSquares = function () {
+    Grid.prototype.getOccupiedSquares = function () {
         var occupiedSquares = new Array();
         this.squares.forEach(function (square) {
             if (square.hasOccupant()) {
@@ -50,15 +50,15 @@ var grid = /** @class */ (function () {
         });
         return occupiedSquares;
     };
-    grid.prototype.getSquare = function (row, column) {
-        var foundSquare = this.squares[row * this.columnNum + column];
+    Grid.prototype.getSquare = function (row, column) {
+        var foundSquare = this.squares[row * this.columnNum + column]; //whilst wraparound could happen if a column provideed is larger thn the number of columns, earlier logic on the input prevents this
         if (foundSquare === undefined) {
             throw console_1.exception("No square found");
         }
         else
             return foundSquare;
     };
-    grid.prototype.populate = function (ships) {
+    Grid.prototype.populate = function (ships) {
         var _this = this;
         this.occupants = ships;
         ships.forEach(function (ship) {
@@ -70,7 +70,7 @@ var grid = /** @class */ (function () {
             }
         });
     };
-    grid.prototype.allSunk = function () {
+    Grid.prototype.allSunk = function () {
         var sunkFlag = true;
         this.occupants.forEach(function (ship) {
             if (!ship.isSunk())
@@ -78,28 +78,28 @@ var grid = /** @class */ (function () {
         });
         return sunkFlag;
     };
-    return grid;
+    return Grid;
 }());
-exports.grid = grid;
-var occupant = /** @class */ (function () {
-    function occupant(name, size) {
+exports.Grid = Grid;
+var Occupant = /** @class */ (function () {
+    function Occupant(name, size) {
         this.hits = 0;
         this.sunk = false;
         this.name = name;
         this.size = size;
     }
-    occupant.prototype.onHit = function () {
+    Occupant.prototype.onHit = function () {
         this.hits++;
         if (this.hits === this.size) {
             this.sunk = true;
         }
     };
-    occupant.prototype.isSunk = function () {
+    Occupant.prototype.isSunk = function () {
         return this.sunk;
     };
-    return occupant;
+    return Occupant;
 }());
-exports.occupant = occupant;
+exports.Occupant = Occupant;
 function placeRow(ship, grid) {
     var row = getRandomInt(grid.rowNum);
     var start = getRandomInt(grid.columnNum - ship.size);

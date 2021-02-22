@@ -1,17 +1,16 @@
 const readline = require('readline');
-import { grid, square, occupant } from "./grid"
+import { Grid, Occupant } from "./grid"
 
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
-const area = new grid(10, 10)
-let destroyer1 = new occupant("destroyer1", 4)
-let destroyer2 = new occupant("destroyer2", 4)
-let battleship1 = new occupant("battleship1", 5)
+const area = new Grid(10, 10)
+let destroyer1 = new Occupant("destroyer1", 4)
+let destroyer2 = new Occupant("destroyer2", 4)
+let battleship1 = new Occupant("battleship1", 5)
 area.populate(new Array(destroyer1, destroyer2, battleship1))
-console.log(area.getOccupiedSquares())
 
 play(area)
 
@@ -19,7 +18,7 @@ function getCoords(input: string): Array<string> {
     return [input.slice(0,1), input.slice(1)]
 }
 
-function play(area: grid) {
+function play(area: Grid) {
     rl.question("Enter Coordinates: ", (entered: string) => {
         const coords = getCoords(entered)
         const col = area.colRef.indexOf(coords[0].toUpperCase())
