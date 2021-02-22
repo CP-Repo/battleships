@@ -11,7 +11,8 @@ let destroyer1 = new Occupant("destroyer1", 4)
 let destroyer2 = new Occupant("destroyer2", 4)
 let battleship1 = new Occupant("battleship1", 5)
 area.populate(new Array(destroyer1, destroyer2, battleship1))
-
+console.log("Battleships")
+console.log("Type 'quit' to exit")
 play(area)
 
 function getCoords(input: string): Array<string> {
@@ -19,11 +20,14 @@ function getCoords(input: string): Array<string> {
 }
 
 function play(area: Grid) {
-    rl.question("Enter Coordinates: ", (entered: string) => {
+    const coordRange: String = area.colRef[0] + "1" + "-" + area.colRef[area.colRef.length-1] + area.rowNum
+    rl.question("Enter Coordinates within range " + coordRange + ": ", (entered: string) => {
         const coords = getCoords(entered)
         const col = area.colRef.indexOf(coords[0].toUpperCase())
         const row = parseInt(coords[1])
-        if(col !== -1 && row > 0 && row <= area.rowNum) {
+        if (entered.toUpperCase() === "QUIT") {
+            rl.close()
+        } else if(col !== -1 && row > 0 && row <= area.rowNum) {
             const target = area.getSquare(row-1, col)
             if(target.hit) {
                 console.log("Already Fired Upon")
@@ -41,7 +45,7 @@ function play(area: Grid) {
                 play(area)        
             } else rl.close()
         } else {
-            console.log("improper coordinates")
+            console.log("Improper Coordinates")
             play(area)
         }
     })

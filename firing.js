@@ -11,16 +11,22 @@ var destroyer1 = new grid_1.Occupant("destroyer1", 4);
 var destroyer2 = new grid_1.Occupant("destroyer2", 4);
 var battleship1 = new grid_1.Occupant("battleship1", 5);
 area.populate(new Array(destroyer1, destroyer2, battleship1));
+console.log("Battleships");
+console.log("Type 'quit' to exit");
 play(area);
 function getCoords(input) {
     return [input.slice(0, 1), input.slice(1)];
 }
 function play(area) {
-    rl.question("Enter Coordinates: ", function (entered) {
+    var coordRange = area.colRef[0] + "1" + "-" + area.colRef[area.colRef.length - 1] + area.rowNum;
+    rl.question("Enter Coordinates within range " + coordRange + ": ", function (entered) {
         var coords = getCoords(entered);
         var col = area.colRef.indexOf(coords[0].toUpperCase());
         var row = parseInt(coords[1]);
-        if (col !== -1 && row > 0 && row <= area.rowNum) {
+        if (entered.toUpperCase() === "QUIT") {
+            rl.close();
+        }
+        else if (col !== -1 && row > 0 && row <= area.rowNum) {
             var target = area.getSquare(row - 1, col);
             if (target.hit) {
                 console.log("Already Fired Upon");
@@ -44,7 +50,7 @@ function play(area) {
                 rl.close();
         }
         else {
-            console.log("improper coordinates");
+            console.log("Improper Coordinates");
             play(area);
         }
     });

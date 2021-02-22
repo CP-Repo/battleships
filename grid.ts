@@ -1,6 +1,9 @@
 import { exception } from "console";
 
 export class Square {
+    /**
+     * Defines each square's properties.
+     */
     occupant?: Occupant;
     hit: boolean = false;
     row: number;
@@ -30,6 +33,9 @@ export class Square {
 }
 
 export class Grid {
+    /**
+     * Defines the play area.
+     */
     squares: Array<Square> = new Array();
     occupants: Array<Occupant>
     rowNum: number;
@@ -45,7 +51,11 @@ export class Grid {
             }
         }
         for(let i = 0; i < this.columnNum; i++) {
-            this.colRef.push(String.fromCharCode(65+i)) //65 is the unicode for A
+            /**
+             * Constructs the column references based upon the size of the grid.
+             * 65 is the unicode for A.
+             */
+            this.colRef.push(String.fromCharCode(65+i))
         }
     }
 
@@ -60,7 +70,10 @@ export class Grid {
     }
 
     getSquare(row: number, column: number): Square {
-        let foundSquare = this.squares[row*this.columnNum + column] //whilst wraparound could happen if a column provideed is larger thn the number of columns, earlier logic on the input prevents this
+        let foundSquare = this.squares[row*this.columnNum + column]
+        /**
+         * Whilst wraparound could happen if a column provided is larger than the number of columns, earlier logic on the input prevents this.
+         */
         if(foundSquare === undefined) {
             throw exception("No square found")
         } else return foundSquare
@@ -87,6 +100,9 @@ export class Grid {
 }
 
 export class Occupant {
+    /**
+     * Defines a ship's properties.
+     */
     name: string
     size: number;
     hits: number = 0;
@@ -147,7 +163,11 @@ function placeCol(ship: Occupant, grid: Grid): void {
         }
     }
 }
-
-function getRandomInt(max: number): number { // random int is not inclusive of max
+ /**
+  * Random int is not inclusive of max.
+  * The random integer i will be in the range 0 <= i < max.
+  * 
+  *  */ 
+function getRandomInt(max: number): number {
     return Math.floor(Math.random() * Math.floor(max))
 }
