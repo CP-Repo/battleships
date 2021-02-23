@@ -1,7 +1,10 @@
 import { exception } from "console";
 
-export class square {
-    occupant?: occupant;
+export class Square {
+    /**
+     * Defines each square's properties.
+     */
+    occupant?: Occupant;
     hit: boolean = false;
     row: number;
     column: number;
@@ -11,11 +14,11 @@ export class square {
         this.column = column
     }
 
-    getOccupant(): occupant {
+    getOccupant(): Occupant {
         return this.occupant
     }
 
-    setOccupant(oc: occupant): void {
+    setOccupant(oc: Occupant): void {
         this.occupant = oc
     }
 
@@ -29,9 +32,12 @@ export class square {
     }
 }
 
-export class grid {
-    squares: Array<square> = new Array();
-    occupants: Array<occupant>
+export class Grid {
+    /**
+     * Defines the play area.
+     */
+    squares: Array<Square> = new Array();
+    occupants: Array<Occupant>
     rowNum: number;
     columnNum: number;
     colRef: Array<string> = new Array()
@@ -41,15 +47,19 @@ export class grid {
         this.columnNum = columns
         for(let i = 0; i < rows; i++) {
             for(let j = 0; j < columns; j++) {
-                this.squares.push(new square(i,j))
+                this.squares.push(new Square(i,j))
             }
         }
         for(let i = 0; i < this.columnNum; i++) {
-            this.colRef.push(String.fromCharCode(65+i)) //65 is the unicode for A
+            /**
+             * Constructs the column references based upon the size of the grid.
+             * 65 is the unicode for A.
+             */
+            this.colRef.push(String.fromCharCode(65+i))
         }
     }
 
-    getShadow(row: number, col: number, length: number, direction: string): Array<square> {
+    getShadow(row: number, col: number, length: number, direction: string): Array<Square> {
         const shadow = new Array()
         if(direction === "h") {
             for(let i = 0; i < length; i++) {
@@ -63,7 +73,7 @@ export class grid {
         return shadow
     }
 
-    getOccupiedSquares(): Array<square> {
+    getOccupiedSquares(): Array<Square> {
         let occupiedSquares = new Array()
         this.squares.forEach(square => {
             if(square.hasOccupant()){
@@ -73,14 +83,25 @@ export class grid {
         return occupiedSquares
     }
 
-    getSquare(row: number, column: number): square {
+    getRow(row: number): Array<Square> {
+        const squares = new Array()
+        for(let i = 0; i < this.columnNum; i++) {
+            squares.push(this.getSquare(row, i))
+        }
+        return squares
+    }
+
+    getSquare(row: number, column: number): Square {
         let foundSquare = this.squares[row*this.columnNum + column]
+        /**
+         * Whilst wraparound could happen if a column provided is larger than the number of columns, earlier logic on the input prevents this.
+         */
         if(foundSquare === undefined) {
             throw exception("No square found")
         } else return foundSquare
     }
 
-    populate(ships: Array<occupant>): void {
+    populate(ships: Array<Occupant>): void {
         this.occupants = ships
         ships.forEach(ship => {
             if(getRandomInt(2) == 1) {
@@ -100,7 +121,10 @@ export class grid {
     }
 }
 
-export class occupant {
+export class Occupant {
+    /**
+     * Defines a ship's properties.
+     */
     name: string
     size: number;
     hits: number = 0;
@@ -124,7 +148,7 @@ export class occupant {
     
 }
 
-function placeRow(ship: occupant, grid: grid): void {
+function placeRow(ship: Occupant, grid: Grid): void {
     const row = getRandomInt(grid.rowNum)
     const start = getRandomInt(grid.columnNum-ship.size)
     let occupiedFlag = false
@@ -143,7 +167,7 @@ function placeRow(ship: occupant, grid: grid): void {
     }
 }
 
-function placeCol(ship: occupant, grid: grid): void {
+function placeCol(ship: Occupant, grid: Grid): void {
     const col = getRandomInt(grid.columnNum)
     const start = getRandomInt(grid.rowNum-ship.size)
     let occupiedFlag = false
@@ -161,7 +185,11 @@ function placeCol(ship: occupant, grid: grid): void {
         }
     }
 }
-
+ /**
+  * Random int is not inclusive of max.
+  * The random integer i will be in the range 0 <= i < max.
+  * 
+  *  */ 
 function getRandomInt(max: number): number {
     return Math.floor(Math.random() * Math.floor(max))
 }
